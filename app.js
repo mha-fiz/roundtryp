@@ -1,5 +1,8 @@
 const express = require('express')
 const morgan = require('morgan')
+const dotenv = require('dotenv')
+
+dotenv.config({ path: './config.env' })
 
 const tourRouter = require('./routes/TourRoutes')
 const userRouter = require('./routes/UserRoutes')
@@ -17,7 +20,6 @@ app.use((req, res, next) => {
 })
 
 // 2) Routes
-
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
 
