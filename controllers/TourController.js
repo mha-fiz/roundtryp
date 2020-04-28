@@ -2,7 +2,37 @@ const Tour = require('../models/TourModel')
 
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find()
+    //*  #1a Basic Filtering
+
+    const queryObj = { ...req.query } //from url
+    const excludedFields = ['page', 'sort', 'limit', 'fields'] //query string we want to remove from queryObj
+    excludedFields.forEach((el) => delete queryObj[el]) //delete the excluded keyword from the queryObj
+
+    //*  #1b Advance ##### Filtering
+
+    let queryStr = JSON.stringify(queryObj) //ex: { "duration": {"gte": "10"} }
+
+    queryStr = queryStr.replace(
+      /\b(gte|gte|lte|lt)\b/g,
+      (matchedKeyword) => `$${matchedKeyword}`
+    ) //{ "duration": {"$gte": "10"} } the $ sign was added
+
+    console.log(JSON.parse(queryStr))
+    // ex: { duration: { '$gte': '10'} } --> now we can query this
+
+    let query = Tour.find(JSON.parse(queryStr)) // we are not 'await' this bsc we only want to returned the Query object
+
+    //*   (#2) ##### Sorting
+
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ')
+      query = query.sort(sortBy)
+    } else {
+      query = query.sort('-createdAt')
+    }
+
+    //*   EXECUTE the final form of query
+    const tours = await Tour.find(query) // we execute the query, returned us the corresponding Document
 
     res.status(200).json({
       status: 'success',

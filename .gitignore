@@ -3,3 +3,7 @@
 
 #env config
 *.env
+
+#additional file
+example.http
+notes.md
