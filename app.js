@@ -1,8 +1,5 @@
 const express = require('express')
 const morgan = require('morgan')
-const dotenv = require('dotenv')
-
-dotenv.config({ path: './config.env' })
 
 const AppError = require('./utils/AppError')
 const globalErrorHandler = require('./controllers/ErrorController')
