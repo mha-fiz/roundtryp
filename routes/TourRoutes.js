@@ -3,8 +3,13 @@ const tourController = require('../controllers/TourController')
 
 const router = express.Router()
 
-// router.param('id', tourController.checkId)
+// Aggregation Pipeline
+router.route('/tour-stats').get(tourController.getTourStats)
+router
+  .route('/monthly-schedule/:year')
+  .get(tourController.getMonthlyTourSchedule)
 
+// Standard Route
 router
   .route('/')
   .get(tourController.getAllTours)
