@@ -4,6 +4,8 @@ const dotenv = require('dotenv')
 
 dotenv.config({ path: './config.env' })
 
+const AppError = require('./utils/AppError')
+const globalErrorHandler = require('./controllers/ErrorController')
 const tourRouter = require('./routes/TourRoutes')
 const userRouter = require('./routes/UserRoutes')
 
@@ -23,6 +25,12 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
 
-// 3) Starting the Server
+//  2.1) Handle undefined routes
+
+app.all('*', (req, res, next) => {
+  next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404))
+})
+
+app.use(globalErrorHandler)
 
 module.exports = app
