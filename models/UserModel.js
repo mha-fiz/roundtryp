@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema({
       message: 'Password did not match!',
     },
   },
+  passwordChangedAt: Date,
 })
 
 //hashing password, not persist passwordConfirm
@@ -46,8 +47,19 @@ userSchema.pre('save', async function (next) {
 })
 
 userSchema.methods.passwordCheck = async function (passwordInput, dbPassword) {
-  const isCorrect = await bcrypt.compare(passwordInput, dbPassword)
-  return isCorrect
+  return await bcrypt.compare(passwordInput, dbPassword)
+}
+
+userSchema.methods.isPasswordChanged = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const convertTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    )
+    return JWTTimestamp < convertTimestamp
+  }
+
+  return false
 }
 
 const User = mongoose.model('User', userSchema)

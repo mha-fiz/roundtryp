@@ -3,6 +3,12 @@ const AppError = require('../utils/AppError')
 
 dotenv.config({ path: '../config.env' })
 
+const handleJWTError = () =>
+  new AppError('Invalid token. Please login again.', 401)
+
+const handleJWTExpired = () =>
+  new AppError('Your token has expired! Please login again', 401)
+
 const handleDBCastError = (err) => {
   const message = `Invalid ${err.path}: ${err.value}.`
   return new AppError(message, 400)
@@ -58,6 +64,7 @@ module.exports = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err }
 
+    //?DATABASE ERRORS
     //Invalid :id input
     if (error.name === 'CastError') error = handleDBCastError(error)
     //If the unique schema type got duplicated
@@ -65,6 +72,9 @@ module.exports = (err, req, res, next) => {
     //If the error coming from mongoose validator
     if (error.name === 'ValidationError') error = handleDBValidationError(error)
 
+    //? TOKEN ERRORS
+    if (error.name === 'JsonWebTokenError') error = handleJWTError(error)
+    if (error.name === 'TokenExpiredError') error = handleJWTExpired()
     sendErrorProd(error, res)
   }
 }
