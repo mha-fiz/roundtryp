@@ -43,6 +43,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 })
 
 //hashing password, not persist passwordConfirm
@@ -56,9 +61,14 @@ userSchema.pre('save', async function (next) {
 
 //right now this specifically used for reset password
 userSchema.pre('save', function (next) {
-  if (!this.isModified('password') || this.isNew) return next()
+  if (!this.isModified('password') || this.isNew()) return next()
 
   this.passwordChangedAt = Date.now() - 1000 //put minus 1s to prevent bug if the token that was issued created before this property created
+  next()
+})
+
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: { $ne: false } })
   next()
 })
 
@@ -89,7 +99,7 @@ userSchema.methods.resetPasswordToken = function () {
 
   console.log({ resetToken }, this.passwordResetToken)
 
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000 //10 minutes
 
   return resetToken
 }
