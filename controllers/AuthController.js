@@ -12,6 +12,32 @@ const signToken = (id) => {
   })
 }
 
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id)
+
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 100
+    ), // convert to ms
+    httpOnly: true,
+  }
+
+  //sent cookie
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true
+  res.cookie('jwt', token, cookieOptions)
+
+  //remove password from output (if this function used in user signup)
+  user.password = undefined
+
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user,
+    },
+  })
+}
+
 exports.signUp = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
@@ -21,15 +47,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
     role: req.body.role,
   })
 
-  const token = signToken(newUser._id)
-
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      newUser,
-    },
-  })
+  createSendToken(newUser, 201, res)
 })
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -47,11 +65,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   //c. send jwt to client
-  const token = signToken(user._id)
-  res.status(200).json({
-    status: 'success',
-    token,
-  })
+  createSendToken(user, 200, res)
 })
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -173,10 +187,23 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await user.save()
 
   //c. send JWT to log the user in
-  const token = signToken(user._id)
+  createSendToken(user, 200, res)
+})
 
-  res.status(200).json({
-    status: 'success',
-    token,
-  })
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  //a. get user from database
+  const user = await User.findById(req.user.id).select('+password')
+
+  //b. check if password is correct
+  if (!(await user.passwordCheck(req.body.passwordCurrent, user.password))) {
+    return next(new AppError('Your current password input is wrong', 403))
+  }
+
+  //c. update password
+  user.password = req.body.password
+  user.passwordConfirm = req.body.passwordConfirm
+  await user.save()
+
+  //d. log user in, send jwt
+  createSendToken(user, 200, res)
 })

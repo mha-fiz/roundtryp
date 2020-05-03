@@ -61,7 +61,7 @@ userSchema.pre('save', async function (next) {
 
 //right now this specifically used for reset password
 userSchema.pre('save', function (next) {
-  if (!this.isModified('password') || this.isNew()) return next()
+  if (!this.isModified('password') || this.isNew) return next()
 
   this.passwordChangedAt = Date.now() - 1000 //put minus 1s to prevent bug if the token that was issued created before this property created
   next()
