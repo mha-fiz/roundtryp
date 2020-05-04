@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const slugify = require('slugify')
+// const User = require('./UserModel')
 
 const tourSchema = new mongoose.Schema(
   {
@@ -69,6 +70,37 @@ const tourSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A tour must have a cover image'],
     },
+    startLocation: {
+      //GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    //embed new doc by creating an array with object
+    locations: [
+      {
+        //GeoJSON
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+      },
+    ],
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
     images: [String],
     createdAt: {
       type: Date,
@@ -89,6 +121,20 @@ tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true })
   next()
 })
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({ path: 'guides', select: '-__v -passwordChangedAt' })
+  next()
+})
+
+//EMBEDDED guides user's data into tour model
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromises = this.guides.map(async (id) => await User.findById(id))
+
+//   this.guides = await Promise.all(guidesPromises)
+
+//   next()
+// })
 
 const Tour = mongoose.model('Tour', tourSchema)
 
