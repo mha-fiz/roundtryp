@@ -22,6 +22,12 @@ exports.getUser = handlerBuilder.getOne(User)
 exports.updateUser = handlerBuilder.updateOne(User)
 exports.deleteUser = handlerBuilder.deleteOne(User)
 
+//add middleware so we could still query using getOne, because it uses req.params.id as the search parameter of findById
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id
+  next()
+}
+
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',

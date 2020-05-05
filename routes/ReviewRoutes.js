@@ -6,6 +6,9 @@ const router = express.Router({ mergeParams: true }) //so we could take the para
 
 //path: reviewRouter/reviews &&  tourRouter/:tourId/reviews will be redirected here
 
+//every routes need to be authenticated
+router.use(authController.protect)
+
 router
   .route('/')
   .get(reviewController.getAllReviews)
@@ -18,7 +21,13 @@ router
 router
   .route('/:id')
   .get(reviewController.getReview)
-  .patch(reviewController.updateReview)
-  .delete(reviewController.deleteReview)
+  .patch(
+    authController.restrictTo('user', 'admin'),
+    reviewController.updateReview
+  )
+  .delete(
+    authController.restrictTo('user', 'admin'),
+    reviewController.deleteReview
+  )
 
 module.exports = router

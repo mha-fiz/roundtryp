@@ -6,18 +6,21 @@ const router = express.Router()
 
 router.post('/signup', authController.signUp)
 router.post('/login', authController.login)
-
 router.post('/forgotPassword', authController.forgotPassword)
 router.patch('/resetPassword/:token', authController.resetPassword)
 
-router.patch(
-  '/updateMyPassword',
-  authController.protect,
-  authController.updatePassword
-)
+//starting here, every route needs to be protected (only for logged in user)
+router.use(authController.protect)
 
-router.patch('/updateMe', authController.protect, userController.updateMe)
-router.delete('/deleteMe', authController.protect, userController.deleteMe)
+router.patch('/updateMyPassword', authController.updatePassword)
+
+router.route('/me').get(userController.getMe, userController.getUser)
+
+router.patch('/updateMe', userController.updateMe)
+router.delete('/deleteMe', userController.deleteMe)
+
+//starting here, the routes restricted for administrator only
+router.use(authController.restrictTo('admin'))
 
 router
   .route('/')

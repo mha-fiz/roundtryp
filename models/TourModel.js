@@ -113,6 +113,10 @@ const tourSchema = new mongoose.Schema(
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
 
+//create index(es)
+tourSchema.index({ price: 1, ratingsAverage: -1 })
+tourSchema.index({ slug: 1 })
+
 tourSchema.virtual('durationInWeek').get(function () {
   return Math.ceil(this.duration / 7)
 })

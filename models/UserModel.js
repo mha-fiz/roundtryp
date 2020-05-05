@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['administrator', 'guide', 'user', 'lead-guide'],
+    enum: ['admin', 'guide', 'user', 'lead-guide'],
     default: 'user',
   },
   photo: {
@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
   },
 })
 
-//hashing password, not persist passwordConfirm
+// hashing password, not persist passwordConfirm
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next()
 
