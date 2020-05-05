@@ -117,6 +117,13 @@ tourSchema.virtual('durationInWeek').get(function () {
   return Math.ceil(this.duration / 7)
 })
 
+//virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour', //part of other model schema we want to get
+  localField: '_id', //what we want to call it in the current model
+})
+
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true })
   next()
@@ -126,15 +133,6 @@ tourSchema.pre(/^find/, function (next) {
   this.populate({ path: 'guides', select: '-__v -passwordChangedAt' })
   next()
 })
-
-//EMBEDDED guides user's data into tour model
-// tourSchema.pre('save', async function (next) {
-//   const guidesPromises = this.guides.map(async (id) => await User.findById(id))
-
-//   this.guides = await Promise.all(guidesPromises)
-
-//   next()
-// })
 
 const Tour = mongoose.model('Tour', tourSchema)
 

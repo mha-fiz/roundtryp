@@ -1,6 +1,7 @@
 const express = require('express')
 const tourController = require('../controllers/TourController')
 const authController = require('../controllers/AuthController')
+const reviewRouter = require('./ReviewRoutes')
 
 const router = express.Router()
 
@@ -10,11 +11,14 @@ router
   .route('/monthly-schedule/:year')
   .get(tourController.getMonthlyTourSchedule)
 
-// Standard Route
+// Standard Routes
+router.use('/:tourId/reviews', reviewRouter)
+
 router
   .route('/')
   .get(authController.protect, tourController.getAllTours)
   .post(tourController.createTour)
+
 router
   .route('/:id')
   .get(tourController.getTour)

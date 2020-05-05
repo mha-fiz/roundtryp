@@ -1,6 +1,7 @@
 const User = require('../models/UserModel')
 const catchAsync = require('../utils/CatchAsync')
 const AppError = require('../utils/AppError')
+const handlerBuilder = require('./HandlerBuilder')
 
 const filterObj = (obj, ...allowedFields) => {
   const filtered = {}
@@ -14,28 +15,17 @@ const filterObj = (obj, ...allowedFields) => {
   return filtered
 }
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find()
+exports.getAllUsers = handlerBuilder.getAll(User)
+exports.getUser = handlerBuilder.getOne(User)
 
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users,
-    },
-  })
-})
+//for admin (dont update password here)
+exports.updateUser = handlerBuilder.updateOne(User)
+exports.deleteUser = handlerBuilder.deleteOne(User)
 
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not available yet',
-  })
-}
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    message: 'This route is not available yet',
+    message: 'This route is not available, please use /signup instead!',
   })
 }
 
@@ -69,14 +59,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   })
 })
 
-//for admin
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not available yet',
-  })
-}
-
 //not really deleting user, just marked it as 'inactive
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false })
@@ -86,10 +68,3 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   })
 })
-
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not available yet',
-  })
-}
