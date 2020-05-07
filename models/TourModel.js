@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const slugify = require('slugify')
-// const User = require('./UserModel')
 
 const tourSchema = new mongoose.Schema(
   {
@@ -33,14 +32,11 @@ const tourSchema = new mongoose.Schema(
       default: 4.5,
       min: [1, 'Rating must be between 1 - 5'],
       max: [5, 'Max rating is 5'],
+      set: (value) => Math.round(value * 10) / 10, //ex: 4.6666->46.666->47->4.7
     },
     ratingsQuantity: {
       type: Number,
       default: 0,
-    },
-    rating: {
-      type: Number,
-      default: 4.5,
     },
     price: {
       type: Number,
@@ -116,6 +112,7 @@ const tourSchema = new mongoose.Schema(
 //create index(es)
 tourSchema.index({ price: 1, ratingsAverage: -1 })
 tourSchema.index({ slug: 1 })
+tourSchema.index({ startLocation: '2dsphere' }) //index for geospatial query
 
 tourSchema.virtual('durationInWeek').get(function () {
   return Math.ceil(this.duration / 7)

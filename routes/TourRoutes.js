@@ -15,6 +15,13 @@ router
     tourController.getMonthlyTourSchedule
   )
 
+//geospatial route
+router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(tourController.getTourWithin)
+
+router.route('/distances/:latlng/unit/:unit').get(tourController.getDistances)
+
 //redirecting for nested routes
 router.use('/:tourId/reviews', reviewRouter)
 
