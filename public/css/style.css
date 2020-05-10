@@ -177,7 +177,7 @@ body {
   font-size: 2.75rem;
   text-align: right;
   position: absolute;
-  bottom: 1rem;
+  bottom: 12em;
   right: 2rem;
   width: 70%;
   z-index: 10;
@@ -902,7 +902,8 @@ body {
   text-decoration: none;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
-  display: inline-flex;
+  display: ruby;
+  /* display: inline-flex; */
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
