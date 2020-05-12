@@ -20,10 +20,11 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 100
     ), // convert to ms
     httpOnly: true,
+    secure: true,
   }
 
   //sent cookie
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true
+  // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true
   res.cookie('jwt', token, cookieOptions)
 
   //remove password from output (if this function used in user signup)
@@ -68,6 +69,16 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res)
 })
 
+exports.logout = async (req, res) => {
+  res.cookie('jwt', 'logout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+    secure: true,
+  })
+
+  res.status(200).json({ status: 'success' })
+}
+
 exports.protect = catchAsync(async (req, res, next) => {
   //a. Check if token exist
   let token
@@ -76,6 +87,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1]
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt
   }
 
   if (!token)
@@ -109,8 +122,40 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //e. grant access to protected route
   req.user = currentUser
+  res.locals.user = currentUser
   next()
 })
+
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      //a. Token verification
+      const decodedToken = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      )
+
+      //b. Check if the user that bear the token still exist
+      const currentUser = await User.findById(decodedToken.id)
+      if (!currentUser) {
+        return next()
+      }
+
+      //c. check if user changed the password after the token issued
+      if (currentUser.isPasswordChanged(decodedToken.iat)) {
+        return next()
+      }
+
+      //d. There is a logged in user.
+      // set currentUser in variable 'res.locals', so view engine can pick it up
+      res.locals.user = currentUser
+      return next()
+    } catch (error) {
+      return next() //for bypassing logout action (because the jwt is invalid), we dont send any error
+    }
+  }
+  next()
+}
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
