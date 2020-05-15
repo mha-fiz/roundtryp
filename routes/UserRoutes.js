@@ -19,7 +19,12 @@ router.patch('/updateMyPassword', authController.updatePassword)
 
 router.route('/me').get(userController.getMe, userController.getUser)
 
-router.patch('/updateMe', userController.updateMe)
+router.patch(
+  '/updateMe',
+  userController.uploadUserPhoto,
+  userController.resizeUserPhoto,
+  userController.updateMe
+)
 router.delete('/deleteMe', userController.deleteMe)
 
 //starting here, the routes restricted for administrator only

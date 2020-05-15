@@ -1,7 +1,61 @@
+const multer = require('multer')
+const sharp = require('sharp')
 const Tour = require('../models/TourModel')
 const catchAsync = require('../utils/CatchAsync')
 const handlerBuilder = require('./HandlerBuilder')
 const AppError = require('../utils/AppError')
+
+const multerStorage = multer.memoryStorage()
+
+const multerFilter = (req, file, callback) => {
+  if (file.mimetype.startsWith('image')) {
+    callback(null, true)
+  } else {
+    callback(new AppError('Please only upload image file', 400), false)
+  }
+}
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+})
+
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 }, //return an array, even though the content only 1 item
+  { name: 'images', maxCount: 3 },
+])
+
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) return next()
+  //a. handling imageCover
+  //we need to assign the filename to req.body, bcs the updateTour handler takes req.body input for update data
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`
+
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.imageCover}`)
+
+  //b.  handling images
+  req.body.images = [] //put the images to the req.body. the schema for 'images' expecting an array
+
+  await Promise.all(
+    req.files.images.map(async (file, index) => {
+      const filename = `tour-${req.params.id}-${Date.now()}-${index + 1}.jpeg`
+
+      await sharp(file.buffer)
+        .resize(2000, 1333)
+        .toFormat('jpeg')
+        .jpeg({ quality: 75 })
+        .toFile(`public/img/tours/${filename}`)
+
+      req.body.images.push(filename)
+    })
+  )
+
+  next()
+})
 
 exports.getAllTours = handlerBuilder.getAll(Tour)
 

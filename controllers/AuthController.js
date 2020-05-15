@@ -20,7 +20,7 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 100
     ), // convert to ms
     httpOnly: true,
-    secure: true,
+    // secure: true,
   }
 
   //sent cookie
@@ -45,7 +45,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-    role: req.body.role,
+    // role: req.body.role,
   })
 
   createSendToken(newUser, 201, res)
