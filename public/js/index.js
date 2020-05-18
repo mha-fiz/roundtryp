@@ -1,21 +1,31 @@
 /* eslint-disable */
-import '@babel/polyfill'
-import { displayMap } from './mapbox'
-import { login, logout, signup } from './login'
-import { updateSettings } from './updateSettings'
 
-// DOM ELEMENTS
+import { test } from './test'
+import { displayMap } from './mapbox'
+import { login, logout } from './login'
+import { signup } from './signup'
+import { updateSettings } from './updateSettings'
+// import { bookTour } from './stripe'
+
+console.log('webpack test')
+console.log(test())
+
+// // DOM ELEMENTS
 const mapBox = document.getElementById('map')
-const loginForm = document.querySelector('.form--login')
+const signupForm = document.querySelector('.form--signup')
+const loginForm = document.querySelector('.form')
 const logOutBtn = document.querySelector('.nav__el--logout')
 const userDataForm = document.querySelector('.form-user-data')
 const userPasswordForm = document.querySelector('.form-user-password')
-const signupForm = document.querySelector('.form')
+
+
+
 
 // DELEGATION
 if (signupForm) {
   signupForm.addEventListener('submit', (e) => {
     e.preventDefault()
+    document.querySelector('.btn--create--account').textContent = 'Creating account...'
 
     const name = document.getElementById('name').value
     const email = document.getElementById('email').value
@@ -70,3 +80,13 @@ if (userPasswordForm)
     document.getElementById('password').value = ''
     document.getElementById('password-confirm').value = ''
   })
+
+
+// const bookBtn = document.getElementById('book-tour')
+// if (bookBtn) {
+//   bookBtn.addEventListener('click', e => {
+//     e.target.textContent = 'Processing...'
+//     const {tourId} = e.target.dataset //tour-id in tour.pug turned into camel case
+//     bookTour(tourId)
+//   } )  
+// }

@@ -1,5 +1,7 @@
-import axios from 'axios'
-import { showAlert } from './alert'
+// import axios from 'axios'
+// import { showAlert } from './alert'
+const axios = require('axios')
+const { showAlert } = require('./alert')
 
 export const updateSettings = async (data, type) => {
 	//the 'type' is either password or data(user data)

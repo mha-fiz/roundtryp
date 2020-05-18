@@ -1,6 +1,7 @@
 const Tour = require('../models/TourModel')
 const catchAsync = require('../utils/CatchAsync')
 const AppError = require('../utils/AppError')
+const Booking = require('../models/BookingModel')
 
 exports.getOverview = catchAsync(async (req, res) => {
   //  a. Get data from API
@@ -30,14 +31,28 @@ exports.getTour = catchAsync(async (req, res, next) => {
   })
 })
 
-exports.signup = catchAsync(async (req,res) => {
-  res.status(200).render('signup', {title: 'Sign up'})
+exports.getMyTours = catchAsync(async (req, res, next) => {
+  //a.  Find all the bookingSchema
+  const bookings = await Booking.find({ user: req.user.id })
+
+  //b.  Find tours with the returned ids
+  const tourIds = bookings.map((el) => el.tour)
+  const tours = await Tour.find({ _id: { $in: tourIds } })
+
+  res.status(200).render('overview', {
+    title: 'My tours',
+    tours,
+  })
+})
+
+exports.signup = catchAsync(async (req, res) => {
+  res.status(200).render('signup', { title: 'Sign up' })
 })
 
 exports.login = catchAsync(async (req, res) => {
   res.status(200).render('login', { title: 'Login' })
 })
 
-exports.getAccount = (req,res) => {
-  res.status(200).render('account', {title: 'Your account'})
+exports.getAccount = (req, res) => {
+  res.status(200).render('account', { title: 'Your account' })
 }

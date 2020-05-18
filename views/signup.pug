@@ -4,7 +4,7 @@ block content
     main.main
         .login-form
             h2.heading-secondary.ma-bt-lg Sign up here
-            form.form
+            form.form--signup
                 .form__group
                     label.form__label(for='name') Name
                     input#name.form__input(type='text', placeholder='John Doe', required)
@@ -18,4 +18,4 @@ block content
                     label.form__label(for='password') Password Confirm
                     input#passwordConfirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
                 .form__group
-                    button.btn.btn--green Signup
+                    button.btn.btn--green.btn--create--account Signup

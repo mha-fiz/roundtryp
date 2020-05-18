@@ -15,6 +15,7 @@ const tourRouter = require('./routes/TourRoutes')
 const userRouter = require('./routes/UserRoutes')
 const reviewRouter = require('./routes/ReviewRoutes')
 const viewRouter = require('./routes/ViewRoutes')
+const bookingRouter = require('./routes/BookingRoutes')
 
 const app = express()
 
@@ -73,6 +74,7 @@ app.use('/', viewRouter)
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/reviews', reviewRouter)
+app.use('/api/v1/bookings', bookingRouter)
 
 //  2.1) Handle undefined routes
 
