@@ -18,7 +18,7 @@ router
 router
   .route('/:id')
   .get(bookingController.getBooking)
-  .patch(bookingController.updateOne)
+  .patch(bookingController.updateBooking)
   .delete(bookingController.deleteBooking)
 
 module.exports = router

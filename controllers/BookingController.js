@@ -1,4 +1,4 @@
-const stripe = require('stripe')('sk_test_4MP3bBTU497ZnOEpT8XMbwnw00D3iBHwwH')
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const Tour = require('../models/TourModel')
 const Booking = require('../models/BookingModel')
 const catchAsync = require('../utils/CatchAsync')

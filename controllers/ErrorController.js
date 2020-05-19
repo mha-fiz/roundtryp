@@ -34,16 +34,14 @@ const sendErrorDev = (err, req, res) => {
       error: err,
       message: err.message,
       stack: err.stack,
-    })    
-  } else {
-    //error for no path found while navigating the website
-    console.error('ERROR', err)
-    return res.status(err.statusCode).render('error', {
-      title: 'Something went wrong :(',
-      msg: err.message
     })
   }
-
+  //error for no path found while navigating the website
+  console.error('ERROR', err)
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong :(',
+    msg: err.message,
+  })
 }
 
 const sendErrorProd = (err, req, res) => {
@@ -53,37 +51,37 @@ const sendErrorProd = (err, req, res) => {
     if (err.isOperational) {
       return res.status(err.statusCode).json({
         status: err.status,
-        message: err.message
-      });
+        message: err.message,
+      })
     }
     // B) Programming or other unknown error: don't leak error details
     // 1) Log error
-    console.error('ERROR 💥', err);
+    console.error('ERROR 💥', err)
     // 2) Send generic message
     return res.status(500).json({
       status: 'error',
-      message: 'Something went very wrong!'
-    });
+      message: 'Something went very wrong!',
+    })
   }
 
   // B) RENDERED WEBSITE
   // A) Operational, trusted error: send message to client
   if (err.isOperational) {
-    console.log(err);
+    console.log(err)
     return res.status(err.statusCode).render('error', {
       title: 'Something went wrong!',
-      msg: err.message
-    });
+      msg: err.message,
+    })
   }
   // B) Programming or other unknown error: don't leak error details
   // 1) Log error
-  console.error('ERROR 💥', err);
+  console.error('ERROR 💥', err)
   // 2) Send generic message
   return res.status(err.statusCode).render('error', {
     title: 'Something went wrong!',
-    msg: 'Please try again later.'
-  });
-};
+    msg: 'Please try again later.',
+  })
+}
 
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500
@@ -95,7 +93,7 @@ module.exports = (err, req, res, next) => {
     let error = { ...err }
 
     //when in prod, somehow the 'error' variable doesnt hold the message property from the 'err' obj
-    error.message = err.message 
+    error.message = err.message
 
     //?DATABASE ERRORS
     //Invalid :id input
