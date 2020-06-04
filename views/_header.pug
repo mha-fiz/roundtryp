@@ -1,8 +1,12 @@
 header.header
     nav.nav.nav--tours
-        a.nav__el(href='/') All tours
-    .header__logo
-        img(src='/img/logo-white.png' alt='roundtryp logo')
+        //- a.nav__el(href='/') All tours
+        .header__logo
+            a.nav__el(href='/')
+                img(src='/img/name-roundtyrp.png' alt='roundtryp logo')
+    //- .header__logo
+    //-     a.nav__el(href='/')
+    //-         img(src='/img/name-roundtyrp.png' alt='roundtryp logo')
     nav.nav.nav--user
         //- we get 'user' property from res.locals we set in isLoggedIn MW
         if user

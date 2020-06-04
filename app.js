@@ -17,6 +17,7 @@ const userRouter = require('./routes/UserRoutes')
 const reviewRouter = require('./routes/ReviewRoutes')
 const viewRouter = require('./routes/ViewRoutes')
 const bookingRouter = require('./routes/BookingRoutes')
+const bookingController = require('./controllers/BookingController')
 
 const app = express()
 
@@ -42,6 +43,14 @@ const limiter = rateLimit({
 })
 
 app.use('/api', limiter)
+
+//for stripe checkout. stripe webhook only allow data sent in raw form, not JSON
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+)
+
 app.use(express.json({ limit: '10kb' }))
 app.use(cookieParser())
 app.use(mongoSanitize())
