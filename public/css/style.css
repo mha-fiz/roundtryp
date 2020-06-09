@@ -31,7 +31,7 @@ body {
   line-height: 1.6;
   font-weight: 300;
   font-family: 'Lato', sans-serif;
-/*  font-family: 'Lilita One', cursive;*/
+  /*  font-family: 'Lilita One', cursive;*/
   color: #777;
   padding: 3rem;
   min-height: 100vh;
@@ -115,15 +115,7 @@ body {
   font-size: 2.25rem;
   text-transform: uppercase;
   font-weight: 700;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right top,
-    from(#7dd56f),
-    to(#28b487)
-  );
-  background-image: linear-gradient(to right, #7dd56f, #28b487);
-  -webkit-background-clip: text;
+  background-image: linear-gradient(to right bottom, #3a7fbb, #74a5d2);
   color: transparent;
   letter-spacing: 0.1rem;
   line-height: 1.3;
@@ -153,18 +145,6 @@ body {
   line-height: 1;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right bottom,
-    from(rgba(125, 213, 111, 0.85)),
-    to(rgba(40, 180, 135, 0.85))
-  );
-  background-image: linear-gradient(
-    to bottom right,
-    rgba(125, 213, 111, 0.85),
-    rgba(40, 180, 135, 0.85)
-  );
 }
 
 .heading-primary {
@@ -172,6 +152,7 @@ body {
   text-align: center;
   width: 70%;
   margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.15);
 }
 
 .heading-tertirary {
@@ -220,7 +201,8 @@ body {
 
 .btn:focus {
   outline: none;
-  background-color: #2e864b;
+  /* background-color: #2e864b; */
+  background-color: goldenrod;
 }
 
 .btn--white {
@@ -232,11 +214,12 @@ body {
 }
 
 .btn--green {
-  background-color: #55c57a;
+  /* background-color: #55c57a; */
+  background-color: #ffce5c;
   color: #fff;
 }
 .btn--green::after {
-  background-color: #55c57a;
+  background-color: #ffce5c;
 }
 
 .btn--small {
@@ -247,7 +230,7 @@ body {
 .btn-small,
 .btn-small:link,
 .btn-small:visited {
-  background-color: #55c57a;
+  background-color: gold;
   color: #fff;
   font-size: 1.4rem;
   padding: 1.25rem 3rem;
@@ -300,7 +283,7 @@ body {
 }
 
 .header {
-  background-color: #444;
+  background-color: #0f1e2e;
   padding: 0 5rem;
   height: 8rem;
   position: relative;
@@ -338,18 +321,6 @@ body {
 .section-header {
   position: relative;
   height: 38vw;
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--section-rotate)),
-    0 100%
-  );
-  -webkit-clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--section-rotate)),
-    0 100%
-  );
 }
 
 .header__hero {
@@ -369,14 +340,6 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right bottom,
-    from(#7dd56f),
-    to(#28b487)
-  );
-  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
   opacity: 0.85;
 }
 
@@ -412,6 +375,7 @@ body {
   -ms-flex-align: center;
   align-items: center;
   text-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.15);
 }
 .heading-box__detail svg {
   margin-right: 0.8rem;
@@ -484,7 +448,7 @@ body {
 .overview-box__icon {
   height: 2.25rem;
   width: 2.25rem;
-  fill: #55c57a;
+  fill: #2d5d8b;
 }
 .overview-box__label {
   font-weight: 700;
@@ -567,7 +531,7 @@ body {
 .mapboxgl-popup-content {
   text-align: center;
   font-family: 'Lato', sans-serif;
-/*font-family: 'Lilita One', cursive;*/
+  /*font-family: 'Lilita One', cursive;*/
   padding: 1.5rem !important;
   font-size: 1.4rem;
   -webkit-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15) !important;
@@ -586,7 +550,8 @@ body {
     from(#7dd56f),
     to(#28b487)
   );
-  background: linear-gradient(to right bottom, #7dd56f, #28b487);
+  /* background: linear-gradient(to right bottom, #7dd56f, #28b487); */
+  background: linear-gradient(to right bottom, #4685c3, #14293e);
   clip-path: polygon(
     0 var(--section-rotate),
     100% 0,
@@ -671,7 +636,7 @@ body {
   margin-right: 1px;
 }
 .reviews__star--active {
-  fill: #55c57a;
+  fill: gold;
 }
 .reviews__star--inactive {
   fill: #bbb;
@@ -774,14 +739,7 @@ body {
   -webkit-box-flex: 32rem;
   -ms-flex: 32rem 0 0px;
   flex: 32rem 0 0;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right bottom,
-    from(#7dd56f),
-    to(#28b487)
-  );
-  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
+  background-image: linear-gradient(to right bottom, #3a7fbb, #74a5d2);
   padding: 4rem 0;
 }
 .user-view__content {
@@ -1082,7 +1040,7 @@ body {
 }
 
 .card {
-  border-radius: 3px;
+  border-radius: 10px;
   overflow: hidden;
   -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
@@ -1104,22 +1062,13 @@ body {
 }
 .card__picture {
   position: relative;
-  -webkit-clip-path: polygon(0 0, 100% 0%, 100% 83%, 0% 98%);
-  clip-path: polygon(0 0, 100% 0%, 100% 83%, 0% 98%);
   height: 22rem;
 }
 .card__picture-overlay {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right bottom,
-    from(#7dd56f),
-    to(#28b487)
-  );
-  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
+  background-image: linear-gradient(to right bottom, #3a7fbb, #74a5d2);
   opacity: 0.7;
 }
 .card__picture-img {
@@ -1163,7 +1112,7 @@ body {
 .card__icon {
   height: 2rem;
   width: 2rem;
-  fill: #55c57a;
+  fill: #2b5f8c;
 }
 .card__footer {
   background-color: #f7f7f7;
@@ -1191,6 +1140,39 @@ body {
   justify-self: end;
   -ms-flex-item-align: center;
   align-self: center;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .card-container {
+    grid-template-columns: 1fr;
+    grid-gap: 7rem;
+  }
+
+  .heading-tertirary {
+    font-size: 1.8rem;
+    text-align: center;
+    position: absolute;
+    top: 20%;
+    right: 15%;
+    transform: translateX(-15%);
+    transform: translateY(-20%);
+    width: 70%;
+    z-index: 10;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 850px) {
+  .card-container {
+    grid-template-columns: 1fr;
+    grid-gap: 7rem;
+  }
+}
+
+@media (min-width: 851px) and (max-width: 1220px) {
+  .card-container {
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 7rem;
+  }
 }
 
 .error {
